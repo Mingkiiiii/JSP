@@ -1,0 +1,44 @@
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.UserService;
+import model.userVO;
+
+@WebServlet("/mypage.do")
+public class MypageController extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = req.getServletPath(); // client 요청경로
+		if("/login.do".equals(path)) {
+			String userId = (String) req.getSession().getAttribute("userId");
+			if(userId != null) {
+				resp.sendRedirect("index.jsp");
+			}else {
+				// forward client 요청정보와 응답정보를 그대로 jsp쪽으로 전달
+				req.getRequestDispatcher("/WEB-INF/view/mypage.jsp").forward(req, resp);
+			}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		UserService service = UserService.getInstance();
+		userVO vo = new userVO();
+		vo.setUserId(req.getParameter("userId"));
+		vo.setUserNm(req.getParameter("userNm"));
+		int cnt = service.updateUser(vo);
+		if(cnt > 0) {
+			resp.sendRedirect("index.jsp");
+		}else {
+			resp.sendRedirect("mypage.do");
+		}
+
+	}
+}

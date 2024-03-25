@@ -1,0 +1,28 @@
+package jdbc;
+
+import java.io.IOException;
+import java.util.Properties;
+
+public class ConnectionFactory {
+	private String diver;
+	private String url;
+	private String id;
+	private String password;
+	private int maxConn;
+	//싱클톤
+	private static ConnectionFactory instance = new ConnectionFactory();
+	public static ConnectionFactory getInstance() {
+		return instance;
+	}
+	private ConnectionFactory() {
+		Properties prop = new Properties();
+		InputStream reader = getClass().getClassLoader().getResourceAsStream("config/db.properties");
+		try {
+			prop.load(reader);
+			driver = prop.getProperty("driver");
+			System.out.println(driver);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

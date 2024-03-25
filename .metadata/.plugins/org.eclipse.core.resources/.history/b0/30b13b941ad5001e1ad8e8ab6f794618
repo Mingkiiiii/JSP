@@ -1,0 +1,21 @@
+<%@page import="jdbc.UserService"%>
+<%@page import="jdbc.userVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<% userVO vo = new userVO();
+		vo.setUserId(request.getParameter("userId"));
+		vo.setUserPw(request.getParameter("userPw"));
+		System.out.println(vo);
+		UserService service = UserService.getInstance();
+		int cnt = service.insertUser(vo);
+		System.out.println(cnt);
+	%>
+</body>
+</html>
